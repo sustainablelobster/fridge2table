@@ -1,0 +1,6 @@
+*venv/
+.vscode/
+tmp/
+*.db
+*.sqlite*
+.devcontainer.json

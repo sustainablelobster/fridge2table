@@ -1,0 +1,56 @@
+setup_python_venv() {
+    VENV=.cmsc495_venv
+    REQUIREMENTS_STAMP=$VENV/.requirements.stamp
+
+    if [ ! -d $VENV ]
+    then
+        echo "Creating Python virtual environment..."
+        if ! python3 -m venv $VENV
+        then
+            echo "Unable to create Python virtual environment"
+            return 1
+        fi
+    fi
+
+    source $VENV/bin/activate
+
+    if ! python3 -c "import pre_commit" 2> /dev/null
+    then
+        echo "Installing pre-commit package..."
+        if ! pip install pre-commit
+        then
+            echo "Unable to install pre-commit package"
+            return 1
+        fi
+    fi
+
+    if [ ! -f $REQUIREMENTS_STAMP ] \
+            || [ requirements.txt -nt $REQUIREMENTS_STAMP ]
+    then
+        echo "Installing Python requirements..."
+        if ! pip install -r requirements.txt
+        then
+            echo "Unable to install Python requirements"
+            return 1
+        fi
+        touch $REQUIREMENTS_STAMP
+    fi
+}
+
+install_pre_commit_hooks() {
+    PRECOMMIT_STAMP=.git/.pre-commit.stamp
+
+    if [ ! -f $PRECOMMIT_STAMP ] \
+            || [ .pre-commit-config.yaml -nt $PRECOMMIT_STAMP ]
+    then
+        echo "Installing pre-commit hooks..."
+        if ! pre-commit install
+        then
+            echo "Unable install pre-commit hooks"
+            return 1
+        fi
+        touch $PRECOMMIT_STAMP
+    fi
+}
+
+setup_python_venv && install_pre_commit_hooks
