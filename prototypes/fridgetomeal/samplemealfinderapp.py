@@ -1,4 +1,4 @@
-#This is another sample python application that we may use to create the mealfinder
+# This is another sample python application that we may use to create the mealfinder
 from flask import Flask, request, jsonify
 
 app = Flask(__name)
@@ -10,6 +10,7 @@ recipes = {
     # Add more data
 }
 
+
 @app.route("/get_recipes", methods=["POST"])
 def get_recipes():
     user_ingredients = request.json.get("ingredients")
@@ -18,6 +19,7 @@ def get_recipes():
         if ingredient in recipes:
             matching_recipes.extend(recipes[ingredient])
     return jsonify({"recipes": matching_recipes})
+
 
 if __name__ == "__main":
     app.run(debug=True)
