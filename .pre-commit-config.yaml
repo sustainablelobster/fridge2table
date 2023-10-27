@@ -9,7 +9,9 @@ repos:
     rev: 23.10.0
     hooks:
     -   id: black
+        exclude: prototypes/
 -   repo: https://github.com/PyCQA/pylint
     rev: v3.0.1
     hooks:
     -   id: pylint
+        exclude: prototypes/
