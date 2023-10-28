@@ -52,6 +52,31 @@ the virtual environment is active (see the example screenshot below).
 When you're done working on the repo, run the `deactivate` command to return
 your shell to its original state.
 
+### Running the App
+
+To run the `fridge2table` app in debug mode, run the following command:
+
+```
+flask --app fridge2table run --debug
+```
+
+### Packaging the Project
+
+To package the project into a wheel file for distribution, run the following command:
+
+```
+python -m build --wheel
+```
+
+This will create a directory named `dist` containing a `.whl` file of the project.
+
+### Project Layout
+
+The project's source tree follows the layout described in Flask's
+["Project Layout"](https://flask.palletsprojects.com/en/3.0.x/tutorial/layout/)
+tutorial. Project source files are located in the [`fridge2table`](fridge2table/)
+directory.
+
 ### Git Workflow
 
 See [this article](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) by Atlassian for a detailed walkthrough of the "git
