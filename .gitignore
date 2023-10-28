@@ -4,3 +4,11 @@ tmp/
 *.db
 *.sqlite*
 .devcontainer.json
+*.pyc
+__pycache__/
+instance/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
