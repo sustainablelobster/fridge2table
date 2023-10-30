@@ -133,18 +133,22 @@ class DbProto:
 
     # the implementation of this function is likely to change as the project continues
     def populate_ingredients(self, ingredients_list):
-        # TODO: implement code to filter duplicate ingredients
         """
         param: param ingredient_list: list of dictionaries with structure:
         {"recipe": "name", "ingredients": ["name1", "name2", "etc"], "url": "url_for_recipe"}
         this function populates the ingredients table
         """
+        unique_ingreds = []
         for dictionary in ingredients_list:
             for key, val in dictionary.items():
                 if key == "ingredients":
                     for item in val:
-                        self.cur.execute(
-                            self.sql_populate_ingredients, (item,))
+                        if item not in unique_ingreds:
+                            unique_ingreds.append(item)
+
+        for ingred in unique_ingreds:
+            self.cur.execute(
+                self.sql_populate_ingredients, (ingred,))
         self.conn.commit()
 
     def create_recipe_ingredients_table(self):
