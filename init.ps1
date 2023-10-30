@@ -21,9 +21,8 @@ function Initialize-PythonVenv {
 
     . "$venv\Scripts\Activate.ps1"
 
-    try {
-        python -c "import pre_commit"
-    } catch {
+    python -c "import pre_commit" 2>&1 | Out-Null
+    if (-not $?) {
         Write-Host -Object "Installing pre-commit package..."
         pip install pre-commit
     }
