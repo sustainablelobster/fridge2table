@@ -1,8 +1,6 @@
 *venv/
 .vscode/
 tmp/
-*.db
-*.sqlite*
 .devcontainer.json
 *.pyc
 __pycache__/
