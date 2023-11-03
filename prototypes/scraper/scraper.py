@@ -34,7 +34,7 @@ def search_epicurious(ingredients: Iterable[str]) -> set[str]:
 
     if response.status_code != 200:
         logging.warning("Got status code %d for %s", response.status_code, search_url)
-        return []
+        return set()
 
     soup = BeautifulSoup(response.content, "html.parser")
     return {
