@@ -1,0 +1,3 @@
+beautifulsoup4
+recipe-scrapers
+requests
