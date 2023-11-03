@@ -15,7 +15,7 @@ TOTALLY_LEGIT_USER_AGENT = (
 )
 
 
-def ingredient_list_to_search_sets(ingredients: Iterable) -> list[tuple]:
+def ingredient_list_to_search_sets(ingredients: Iterable[str]) -> list[tuple]:
     """Convert a list of ingredients into a collection of unique subsets for performing searches"""
     chain = itertools.chain.from_iterable(
         itertools.combinations(ingredients, r) for r in range(len(ingredients) + 1)
@@ -62,7 +62,6 @@ def main() -> None:
         required=False,
     )
     args = arg_parser.parse_args()
-    print("still running")
 
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
