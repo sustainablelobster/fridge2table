@@ -3,6 +3,7 @@ import argparse
 import itertools
 import logging
 import math
+import multiprocessing
 import os
 from typing import Iterable
 
@@ -33,7 +34,7 @@ def search_epicurious(ingredients: Iterable[str]) -> set[str]:
     )
 
     if response.status_code != 200:
-        logging.warning("Got status code %d for %s", response.status_code, search_url)
+        logging.info("Got status code %d for %s", response.status_code, search_url)
         return set()
 
     soup = BeautifulSoup(response.content, "html.parser")
@@ -65,20 +66,16 @@ def main() -> None:
 
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
-    else:
-        logging.basicConfig(level=logging.ERROR)
 
     print("Searching for recipes...")
     search_sets = ingredient_list_to_search_sets(args.ingredients)
     urls = set()
-    for search_set in search_sets:
-        urls.update(search_epicurious(search_set))
+    with multiprocessing.Pool() as p:
+        urls.update(*p.map(search_epicurious, search_sets))
+        recipes = p.map(recipe_scrapers.scrape_me, urls)
 
-    print("Scraping recipes...", os.linesep)
-    for url in urls:
-        logging.info("Scraping %s ...", url)
-        recipe = recipe_scrapers.scrape_me(url)
-        print(recipe.title())
+    for recipe in recipes:
+        print("Title:", recipe.title())
         print("Link:", recipe.canonical_url())
         print("Image URL:", recipe.image())
         print("Ingredients:", recipe.ingredients(), os.linesep)
