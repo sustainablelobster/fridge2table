@@ -8,6 +8,7 @@ import os
 from typing import Iterable
 
 import recipe_scrapers
+import PyIng
 import requests
 from bs4 import BeautifulSoup
 
@@ -44,6 +45,22 @@ def search_epicurious(ingredients: Iterable[str]) -> set[str]:
     }
 
 
+def scraped_recipe_to_dict(
+    scraped_recipe: recipe_scrapers._abstract.AbstractScraper,
+) -> dict:
+    """Extract and cleanup relevant info from scraped recipe"""
+    return {
+        "name": scraped_recipe.title(),
+        "url": scraped_recipe.canonical_url(),
+        "image_url": scraped_recipe.image(),
+        "ingredients": {
+            x["name"]
+            for x in PyIng.parse_ingredients(scraped_recipe.ingredients())
+            if x["name"] != ""
+        },
+    }
+
+
 def main() -> None:
     """Program entry point"""
     arg_parser = argparse.ArgumentParser()
@@ -72,13 +89,14 @@ def main() -> None:
     urls = set()
     with multiprocessing.Pool() as p:
         urls.update(*p.map(search_epicurious, search_sets))
-        recipes = p.map(recipe_scrapers.scrape_me, urls)
+        raw_recipes = p.map(recipe_scrapers.scrape_me, urls)
+        recipes = p.map(scraped_recipe_to_dict, raw_recipes)
 
     for recipe in recipes:
-        print("Title:", recipe.title())
-        print("Link:", recipe.canonical_url())
-        print("Image URL:", recipe.image())
-        print("Ingredients:", recipe.ingredients(), os.linesep)
+        print("Name:", recipe["name"])
+        print("Link:", recipe["url"])
+        print("Image URL:", recipe["image_url"])
+        print("Ingredients:", recipe["ingredients"], os.linesep)
 
 
 if __name__ == "__main__":
