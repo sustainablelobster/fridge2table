@@ -1,4 +1,4 @@
 beautifulsoup4
-recipe-scrapers
 pying @ git+https://github.com/sustainablelobster/PyIng.git@minor-fixes
+recipe-scrapers
 requests

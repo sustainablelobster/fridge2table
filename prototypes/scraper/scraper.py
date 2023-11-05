@@ -7,8 +7,8 @@ import multiprocessing
 import os
 from typing import Iterable
 
-import recipe_scrapers
 import PyIng
+import recipe_scrapers
 import requests
 from bs4 import BeautifulSoup
 
