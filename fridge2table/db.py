@@ -12,42 +12,47 @@ class DatabaseHandler:
         self._cursor = self._connection.cursor()
 
         self._cursor.execute(
-            "CREATE TABLE IF NOT EXISTS recipes ("
-            + "id INTEGER PRIMARY KEY,"
-            + "name TEXT NOT NULL,"
-            + "url TEXT NOT NULL,"
-            + "image_url TEXT,"
-            + "UNIQUE (name, url, image_url)"
-            + ");"
+            """
+            CREATE TABLE IF NOT EXISTS recipes (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                url TEXT NOT NULL,
+                image_url TEXT,
+                UNIQUE (name, url, image_url)
+            );
+            """
         )
 
         self._cursor.execute(
-            "CREATE TABLE IF NOT EXISTS ingredients ("
-            + "id INTEGER PRIMARY KEY,"
-            + "name TEXT NOT NULL,"
-            + "UNIQUE (name)"
-            + ");"
+            """
+            CREATE TABLE IF NOT EXISTS ingredients (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL,
+                UNIQUE (name)
+            );
+            """
         )
 
         self._cursor.execute(
-            "CREATE TABLE IF NOT EXISTS recipe_ingredients ("
-            + "recipe_id INTEGER,"
-            + "ingredient_id INTEGER,"
-            + "FOREIGN KEY (recipe_id) REFERENCES recipes (id) "
-            + "ON UPDATE CASCADE ON DELETE CASCADE,"
-            + "FOREIGN KEY (ingredient_id) REFERENCES ingredients (id) "
-            + "ON UPDATE CASCADE ON DELETE CASCADE,"
-            + "PRIMARY KEY (recipe_id, ingredient_id),"
-            + "UNIQUE (recipe_id, ingredient_id)"
-            + ");"
+            """
+            CREATE TABLE IF NOT EXISTS recipe_ingredients (
+                recipe_id INTEGER,
+                ingredient_id INTEGER,
+                FOREIGN KEY (recipe_id) REFERENCES recipes (id)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE,
+                FOREIGN KEY (ingredient_id) REFERENCES ingredients (id)
+                    ON UPDATE CASCADE
+                    ON DELETE CASCADE,
+                PRIMARY KEY (recipe_id, ingredient_id),
+                UNIQUE (recipe_id, ingredient_id)
+            );
+            """
         )
 
         self._cursor.execute(
-            "CREATE TABLE IF NOT EXISTS user_ingredients ("
-            + "name TEXT PRIMARY KEY"
-            + ");"
+            "CREATE TABLE IF NOT EXISTS user_ingredients (name TEXT PRIMARY KEY);"
         )
-
         self._connection.commit()
 
     def __del__(self):
@@ -67,11 +72,13 @@ class DatabaseHandler:
             )
 
             self._cursor.execute(
-                "INSERT OR IGNORE INTO recipe_ingredients (recipe_id, ingredient_id) "
-                + "VALUES ("
-                + "(SELECT id FROM recipes WHERE name = ?),"
-                + "(SELECT id FROM ingredients WHERE name = ?)"
-                + ");",
+                """
+                INSERT OR IGNORE INTO recipe_ingredients (recipe_id, ingredient_id)
+                VALUES (
+                    (SELECT id FROM recipes WHERE name = ?),
+                    (SELECT id FROM ingredients WHERE name = ?)
+                );
+                """,
                 (recipe.name, ingredient),
             )
 

@@ -14,3 +14,13 @@ class Recipe:
     def __post_init__(self):
         if not isinstance(self.ingredients, set):
             self.ingredients = set(self.ingredients)
+
+    def __str__(self):
+        return str(
+            {
+                "name": self.name,
+                "url": self.url,
+                "image_url": self.image_url,
+                "ingredients": self.ingredients,
+            }
+        )
