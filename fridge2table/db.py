@@ -51,8 +51,9 @@ class DatabaseHandler:
         )
 
         self._cursor.execute(
-            "CREATE TABLE IF NOT EXISTS user_ingredients (name TEXT PRIMARY KEY);"
+            "CREATE TEMP TABLE user_ingredients (name TEXT PRIMARY KEY);"
         )
+
         self._connection.commit()
 
     def __del__(self):
