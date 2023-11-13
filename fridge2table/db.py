@@ -1,7 +1,7 @@
 """Provides class for handling database operations"""
 import sqlite3
 
-from .types import Recipe
+from .types import Ingredient, Recipe
 
 
 class DatabaseHandler:
@@ -69,7 +69,8 @@ class DatabaseHandler:
 
         for ingredient in recipe.ingredients:
             self._cursor.execute(
-                "INSERT OR IGNORE INTO ingredients (name) VALUES (?);", (ingredient,)
+                "INSERT OR IGNORE INTO ingredients (name) VALUES (?);",
+                (ingredient.name,),
             )
 
             self._cursor.execute(
@@ -80,14 +81,15 @@ class DatabaseHandler:
                     (SELECT id FROM ingredients WHERE name = ?)
                 );
                 """,
-                (recipe.name, ingredient),
+                (recipe.name, ingredient.name),
             )
 
         self._connection.commit()
 
-    def add_user_ingredient(self, ingredient: str) -> None:
+    def add_user_ingredient(self, ingredient: Ingredient) -> None:
         """Add a user ingredient to the database"""
         self._cursor.execute(
-            "INSERT OR IGNORE INTO user_ingredients (name) values (?)", (ingredient,)
+            "INSERT OR IGNORE INTO user_ingredients (name) values (?)",
+            (ingredient.name,),
         )
         self._connection.commit()

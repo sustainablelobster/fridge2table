@@ -8,9 +8,17 @@ authors = [
 ]
 description = "A web app that recommends recipes from the web based on what's in your pantry."
 dependencies = [
+	"beautifulsoup4",
 	"flask",
+	"pluralizer",
+	"pying@git+https://github.com/sustainablelobster/PyIng#egg=minor-fixes",
+	"recipe_scrapers",
+	"requests",
 ]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
