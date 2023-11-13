@@ -49,7 +49,7 @@ class Recipe:
     name: str
     url: str
     image_url: str
-    ingredients: set[str]
+    ingredients: set[Ingredient]
 
     def __post_init__(self):
         self.ingredients = {x for x in self.ingredients if x.name is not None}
