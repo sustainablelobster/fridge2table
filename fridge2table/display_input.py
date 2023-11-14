@@ -2,20 +2,6 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-# HTML template
-html_template = """
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User Input Display</title>
-</head>
-<body>
-    <h1>User Input:</h1>
-    <div>{{ user_input | safe }}</div>
-</body>
-</html>
-"""
-
 @app.route('/', methods=['GET', 'POST'])
 def display_user_input():
     if request.method == 'POST':
