@@ -2,7 +2,6 @@ from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
 def display_user_input():
     if request.method == 'POST':
         user_input = request.form['user_input']
