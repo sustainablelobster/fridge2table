@@ -1,0 +1,13 @@
+# HTML template
+html_template = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Input Display</title>
+</head>
+<body>
+    <h1>User Input:</h1>
+    <div>{{ user_input | safe }}</div>
+</body>
+</html>
+"""
