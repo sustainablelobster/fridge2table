@@ -47,8 +47,8 @@ class DbProto:
                                         )"""
     #
     # pre made sql statement to retreive recipes with listed ingredients
-    sql_retrieve_recipes_stmt = """select ri.recipe_id from recipe_ingredients ri
-                                inner join recipes r on ri.recipe_id = r.recipe_id
+    sql_retrieve_recipes_stmt = """select r.recipe_id, r.name, r.url from recipes r
+                                inner join recipe_ingredients ri on r.recipe_id = ri.recipe_id
                                 inner join ingredients i on i.ingredient_id = ri.ingredient_id
                                 inner join user_ingredients ui on ui.name = i.name
                                 group by ri.recipe_id
