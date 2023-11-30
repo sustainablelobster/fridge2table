@@ -62,12 +62,14 @@ class DatabaseHandler:
         self._connection.commit()
 
     def get_matching_recipes(self) -> list[Recipe]:
-        """Get recipes matching user's ingredients"""
+        """Get recipes matching user's ingredients, sorted from most to least relevant"""
         user_ingredients = self.get_user_ingredients()
         matching_recipes = []
         for user_ingredient in user_ingredients:
             matching_recipes += self.get_recipes_containing_ingredient(user_ingredient)
-        return dedup_list(matching_recipes)
+        return dedup_list(matching_recipes).sort(
+            key=lambda x: x.rank(user_ingredients), reverse=True
+        )
 
     def get_user_ingredients(self) -> list[str]:
         """Return user's ingredients"""
@@ -81,13 +83,13 @@ class DatabaseHandler:
             (f"%{ingredient}%",),
         )
         recipes = []
-        for selection in selection_cursor.fetchall():
+        for item in selection_cursor.fetchall():
             recipes.append(
                 Recipe(
-                    selection[0],
-                    selection[1],
-                    selection[2],
-                    selection[3].split(self._INGREDIENT_DELIMITER),
+                    item[0],
+                    item[1],
+                    item[2],
+                    item[3].split(self._INGREDIENT_DELIMITER),
                 )
             )
         return recipes

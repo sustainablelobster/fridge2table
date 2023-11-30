@@ -2,6 +2,7 @@
 import logging
 from collections import Counter
 from dataclasses import dataclass
+from typing import Iterable
 
 import PyIng
 from pluralizer import Pluralizer
@@ -72,3 +73,13 @@ class Recipe:
 
     def __hash__(self):
         return hash(str(self))
+
+    def rank(self, ingredients: Iterable[str]) -> float:
+        """Get the ratio of matching ingredients to total ingredients in recipe"""
+        matches = 0
+        for ingredient in ingredients:
+            for recipe_ingredient in self.ingredients:
+                if ingredient in recipe_ingredient:
+                    matches += 1
+                    break
+        return matches / len(self.ingredients)
