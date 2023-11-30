@@ -8,6 +8,8 @@ from .types import Recipe
 class DatabaseHandler:
     """Provides an interface to the recipe/ingredients database"""
 
+    _INGREDIENT_DELIMITER = "|"
+
     def __init__(self, database_path: str):
         self._connection = sqlite3.connect(database_path)
         self._cursor = self._connection.cursor()
@@ -46,7 +48,7 @@ class DatabaseHandler:
                 recipe.name,
                 recipe.url,
                 recipe.image_url,
-                ",".join(recipe.ingredients),
+                self._INGREDIENT_DELIMITER.join(recipe.ingredients),
             ),
         )
         self._connection.commit()
@@ -82,7 +84,10 @@ class DatabaseHandler:
         for selection in selection_cursor.fetchall():
             recipes.append(
                 Recipe(
-                    selection[0], selection[1], selection[2], selection[3].split(",")
+                    selection[0],
+                    selection[1],
+                    selection[2],
+                    selection[3].split(self._INGREDIENT_DELIMITER),
                 )
             )
         return recipes
