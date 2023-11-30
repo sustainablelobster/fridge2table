@@ -1,5 +1,6 @@
 """Defines custom types/data structures"""
 import logging
+from collections import Counter
 from dataclasses import dataclass
 
 import PyIng
@@ -49,10 +50,7 @@ class Recipe:
     name: str
     url: str
     image_url: str
-    ingredients: set[Ingredient]
-
-    def __post_init__(self):
-        self.ingredients = {x for x in self.ingredients if x.name is not None}
+    ingredients: list[str]
 
     def __str__(self):
         return str(
@@ -69,7 +67,7 @@ class Recipe:
             self.name == other.name
             and self.url == other.url
             and self.image_url == other.image_url
-            and self.ingredients == other.ingredients
+            and Counter(self.ingredients) == Counter(other.ingredients)
         )
 
     def __hash__(self):

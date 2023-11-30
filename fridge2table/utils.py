@@ -12,3 +12,8 @@ def powerset(iterable: Iterable, exclude_empty: bool = True) -> set[frozenset]:
     if exclude_empty:
         ret_val.remove(set())
     return ret_val
+
+
+def dedup_list(l: list) -> list:
+    """Remove duplicate items from list"""
+    return list(set(l))

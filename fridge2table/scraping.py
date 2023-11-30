@@ -8,7 +8,7 @@ import recipe_scrapers
 import requests
 from bs4 import BeautifulSoup
 
-from .types import Ingredient, Recipe
+from .types import Recipe
 from .utils import powerset
 
 
@@ -17,7 +17,7 @@ class AbstractScraper(ABC):
     """Abstract base class which all recipe scrapers inherit from"""
 
     @classmethod
-    def scrape(cls, ingredients: Iterable[Ingredient]) -> set[Recipe]:
+    def scrape(cls, ingredients: Iterable[str]) -> set[Recipe]:
         """Takes a collection of Ingredients and returns a matching set of Recipes"""
         ingredients_powerset = powerset(ingredients)
         urls = set()
@@ -35,12 +35,12 @@ class AbstractScraper(ABC):
             scraper.title(),
             scraper.canonical_url(),
             scraper.image(),
-            {Ingredient(x) for x in scraper.ingredients()},
+            scraper.ingredients(),
         )
 
     @classmethod
     @abstractmethod
-    def _search(cls, ingredients: set[Ingredient]) -> set[str]:
+    def _search(cls, ingredients: set[str]) -> set[str]:
         """Search for recipes that match the given set of Ingredients"""
 
 
@@ -53,10 +53,10 @@ class EpicuriousScraper(AbstractScraper):
     )
 
     @classmethod
-    def _search(cls, ingredients: set[Ingredient]) -> set[str]:
+    def _search(cls, ingredients: set[str]) -> set[str]:
         """Search epicurious.com for recipes that match the given set of Ingredients"""
         search_url = "https://www.epicurious.com/search/?include=" + "%2C".join(
-            [x.name for x in ingredients]
+            ingredients
         )
         logging.info("Getting %s ...", search_url)
 
