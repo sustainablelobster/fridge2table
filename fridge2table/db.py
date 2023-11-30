@@ -75,7 +75,7 @@ class DatabaseHandler:
     def get_recipes_containing_ingredient(self, ingredient: str) -> list[Recipe]:
         """Return a list of recipes that contain the given ingredient"""
         selection_cursor = self._cursor.execute(
-            "SELECT (name, url, image_url, ingredients) FROM recipes WHERE ingredients LIKE ?",
+            "SELECT name,url,image_url,ingredients FROM recipes WHERE ingredients LIKE ?",
             (f"%{ingredient}%",),
         )
         recipes = []
