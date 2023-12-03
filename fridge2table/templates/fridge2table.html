@@ -13,10 +13,10 @@
     <div style="font-family:'Courier New'" class="container">
         <div class="left">
             Your Fridge:
-        <form id="inputForm"><! -- NEED TO EDIT THIS action=-->
+        <form id="inputForm">
             <label for="ingredients">What do you have available to make a meal? </label><br>
             <input type="text" id="ingredients" placeholder="eg. salt, eggs, yogurt etc." ><br><br>
-            <input type="submit" onclick="displayInput()" class="findmymeal" value="Find my meal">
+            <input type="submit" onclick="displayInput()"  id="submitIng" class="findmymeal" value="Find my meal">
             <div id="displayArea">
 
                 <script>script.js</script>
@@ -26,9 +26,11 @@
         </div>
         <div class="right">
             Recipes with...
-            <div id="displayArea"></div>
+            <div id="displayArea">
+                <script>script.js</script>
+            </div>
 
-            <script>script.js</script>
+            <script>script2.js</script>
         </div>
     </div>
 </body>

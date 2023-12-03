@@ -1,6 +1,6 @@
 function addRecipe() {
     // Get the input value
-    var recipeInput = document.getElementById("recipeInput");
+    var recipeInput = document.getElementById("ingredients");
     var recipeText = recipeInput.value;
 
     // Check if the input is not empty
