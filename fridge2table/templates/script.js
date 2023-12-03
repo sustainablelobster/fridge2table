@@ -1,10 +1,25 @@
-function displayInput() {
+  const element = document.getElementById("submitIng");
+  element.addEventListener("click", displayInput);
+  var inField = document.getElementById("ingredients");
+  var ingArea = document.getElementById("displayArea");
+
+  function displayInput(e) {
+    e.preventDefault();
     // Get the input values from the form
-    var ingredients = document.getElementById("ingredients").value;
+    let usrInput = inField.value.split(",");
 
-    // Create a message to display
-    var message = ingredients
+    // reset display
+    ingArea.innerHTML = "";
 
-    // Update the HTML content to display the input data
-   document.getElementById("displayArea").innerHTML = message;
-   }
+    let length = usrInput.length;
+    let ingLength = [];
+
+    for (i = 0; i < length; i++) {
+      let add_row = document.createElement("nw_row");
+
+      add_row.append(usrInput[i]);
+
+      ingArea.appendChild(add_row);
+    }
+
+  }
