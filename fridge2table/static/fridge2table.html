@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>fridge2table</title>
+        <script src="static/fridge2table.js"></script>
+    </head>
+    <body onload="initialize()">
+        <header><h1>fridge2table</h1></header>
+        <div>
+            <h2>Input</h2>
+            <textarea id="inputBox" placeholder="enter ingredients here (comma-separated)"></textarea><br>
+            <button id="addButton" type="button" onclick="addIngredients()">Add</button>
+            <button id="removeButton" type="button" onclick="removeIngredients()">Remove</button>
+        </div>
+        <hr>
+        <div>
+            <h2>Ingredients</h2>
+            <div id="ingredientsDisplay"></div>
+            <button id="searchButton" type="button" onclick="getRecipes()">Search</button>
+            <div id="searchStatus"></div>
+        </div>
+        <hr>
+        <div>
+            <h2>Recipes</h2>
+            <div id="recipesDisplay"></div>
+        </div>
+    </body>
+</html>
