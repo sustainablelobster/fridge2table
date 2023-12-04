@@ -2,7 +2,7 @@
 
 import os
 
-from flask import current_app, Flask, jsonify, request
+from flask import current_app, Flask, jsonify, request, render_template
 
 from .db import DatabaseHandler
 
