@@ -1,5 +1,5 @@
 function stringToArray(string, delimiter) {
-    let arr = string.split(delimiter);
+    const arr = string.split(delimiter);
     for (let i = 0; i < arr.length; i += 1) {
         arr[i] = arr[i].trim();
     }
@@ -7,7 +7,7 @@ function stringToArray(string, delimiter) {
 }
 
 function getInput() {
-    let rawInput = document.getElementById("inputBox").value;
+    const rawInput = document.getElementById("inputBox").value;
     return stringToArray(rawInput, ",");
 }
 
