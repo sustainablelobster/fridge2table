@@ -2,7 +2,7 @@
 
 import os
 
-from flask import current_app, Flask, jsonify, request
+from flask import Flask, current_app, jsonify, request
 
 from .db import DatabaseHandler
 
@@ -29,11 +29,15 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
     @app.route("/")
     def home():
         """Display main page"""
-        return current_app.send_static_file("fridge2table.html")
+        return current_app.send_static_file("index.html")
+
+    @app.route("/favicon.ico")
+    def favicon():
+        """Return favicon"""
+        return current_app.send_static_file("favicon.ico")
 
     @app.route("/add_ingredients", methods=["POST"])
     def add_ingredients():

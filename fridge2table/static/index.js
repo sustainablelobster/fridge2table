@@ -7,30 +7,36 @@ function stringToArray(string, delimiter) {
 }
 
 function getInput() {
-    const rawInput = document.getElementById("inputBox").value;
+    const rawInput = document.getElementById("input-box").value;
     return stringToArray(rawInput, ",");
 }
 
 function toggleControls(disabled) {
-    document.getElementById("inputBox").disabled = disabled;
-    document.getElementById("addButton").disabled = disabled;
-    document.getElementById("removeButton").disabled = disabled;
-    document.getElementById("searchButton").disabled = disabled;
+    document.getElementById("input-box").disabled = disabled;
+    document.getElementById("add-button").disabled = disabled;
+    document.getElementById("remove-button").disabled = disabled;
+    document.getElementById("search-button").disabled = disabled;
 }
 
 function updateIngredientsDisplay(ingredients) {
-    document.getElementById("ingredientsDisplay").innerHTML = ingredients;
+    document.getElementById("ingredients-display").innerHTML = ingredients.join(", ");
 }
 
 function updateRecipesDisplay(recipes) {
-    let html = "";
+    let html = "<table>";
     for (let i = 0; i < recipes.length; i += 1) {
-        html += `<div>
-                    <img src="${recipes[i].image_url}" width="100" height="100">
-                    <a href="${recipes[i].url}">${recipes[i].name}</a>
-                </div>`;
+        let imageUrl = (recipes[i].image_url) ? recipes[i].image_url : "static/placeholder.png";
+        html += `<tr>
+                    <td><img src="${imageUrl}" width="100" height="100"></td>
+                    <td>
+                        <a href="${recipes[i].url}"><b>${recipes[i].name}</b></a><br>
+                        ${recipes[i].ingredients.join("; ")}
+                    </td>
+
+                </tr>`;
     }
-    document.getElementById("recipesDisplay").innerHTML = html;
+    html += "</table>"
+    document.getElementById("recipes-display").innerHTML = html;
 }
 
 async function initialize() {
@@ -65,11 +71,12 @@ async function removeIngredients() {
 
 async function getRecipes() {
     toggleControls(true);
-    const searchStatus = document.getElementById("searchStatus");
-    searchStatus.innerHTML = "<em>Searching for recipes, please wait...</em>";
+    const searchButton = document.getElementById("search-button");
+    const originalInnerHTML = searchButton.innerHTML;
+    searchButton.innerHTML = "<em>Searching...</em>";
     const response = await fetch("/get_recipes");
     const recipes = await response.json();
     updateRecipesDisplay(recipes);
     toggleControls(false);
-    searchStatus.innerHTML = "";
+    searchButton.innerHTML = originalInnerHTML;
 }
