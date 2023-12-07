@@ -1,4 +1,7 @@
 """Provides class for handling database operations"""
+import importlib
+import json
+import os
 import sqlite3
 
 from .utils import dedup_list
@@ -9,10 +12,11 @@ from .types import Recipe
 class DatabaseHandler:
     """Provides an interface to the recipe/ingredients database"""
 
+    _DB_PATH = os.path.join(os.path.expanduser("~"), ".fridge2table.db")
     _LIST_DELIMITER = "|"
 
-    def __init__(self, database_path: str):
-        self._connection = sqlite3.connect(database_path)
+    def __init__(self):
+        self._connection = sqlite3.connect(self._DB_PATH)
         self._cursor = self._connection.cursor()
 
         self._cursor.execute(
@@ -35,6 +39,9 @@ class DatabaseHandler:
         self._cursor.execute(
             "CREATE TABLE IF NOT EXISTS searches (ingredients TEXT PRIMARY KEY);"
         )
+
+        if not self._has_recipes():
+            self._add_cached_recipes()
 
         self._connection.commit()
 
@@ -74,11 +81,13 @@ class DatabaseHandler:
         )
         self._connection.commit()
 
-    def get_matching_recipes(self) -> list[Recipe]:
+    def get_matching_recipes(self, new_search: bool = False) -> list[Recipe]:
         """Get recipes matching user's ingredients, sorted from most to least relevant"""
         user_ingredients = self.get_user_ingredients()
-        if not self._searched_before(user_ingredients):
-            for recipe in EpicuriousScraper.scrape(user_ingredients):
+        if new_search:
+            for recipe in EpicuriousScraper.scrape(
+                user_ingredients, self._get_recipe_urls()
+            ):
                 self.add_recipe(recipe)
             self._save_search(user_ingredients)
 
@@ -113,13 +122,27 @@ class DatabaseHandler:
             )
         return recipes
 
-    def _searched_before(self, user_ingredients: list[str]) -> bool:
+    def searched_before(self) -> bool:
         """Determine if current inventory of ingredients has been searched before"""
         selection = self._cursor.execute(
             "SELECT * FROM searches WHERE ingredients = ?;",
-            (self._stringify_list(user_ingredients),),
+            (self._stringify_list(self.get_user_ingredients()),),
         )
         return selection.fetchone() is not None
+
+    def _has_recipes(self) -> bool:
+        """Determine if database has no recipes"""
+        selection = self._cursor.execute("SELECT * FROM recipes;")
+        return selection.fetchone() is not None
+
+    def _add_cached_recipes(self) -> None:
+        with importlib.resources.open_text(
+            "fridge2table.resources", "cached_recipes.json"
+        ) as f:
+            for recipe_dict in json.load(f):
+                recipe = Recipe(**recipe_dict)
+                self.add_recipe(recipe)
+        self._connection.commit()
 
     def _save_search(self, user_ingredients) -> None:
         """Save the current inventory of ingredients to the search table"""
@@ -127,6 +150,12 @@ class DatabaseHandler:
             "INSERT OR IGNORE INTO searches (ingredients) values (?);",
             (self._stringify_list(user_ingredients),),
         )
+        self._connection.commit()
+
+    def _get_recipe_urls(self) -> list[str]:
+        """Return list of all recipe urls in database"""
+        selection = self._cursor.execute("SELECT url FROM recipes")
+        return [x[0] for x in selection.fetchall()]
 
     @classmethod
     def _stringify_list(cls, l: list[str]) -> str:

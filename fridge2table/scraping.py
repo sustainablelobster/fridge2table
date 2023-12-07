@@ -17,12 +17,16 @@ class AbstractScraper(ABC):
     """Abstract base class which all recipe scrapers inherit from"""
 
     @classmethod
-    def scrape(cls, ingredients: Iterable[str]) -> set[Recipe]:
+    def scrape(
+        cls, ingredients: Iterable[str], known_urls: Iterable[str] = None
+    ) -> set[Recipe]:
         """Takes a collection of Ingredients and returns a matching set of Recipes"""
         ingredients_powerset = powerset(ingredients)
         urls = set()
         with multiprocessing.Pool() as p:
             urls.update(*p.map(cls._search, ingredients_powerset))
+            if known_urls is not None:
+                urls -= set(known_urls)
             scrapers = p.map(recipe_scrapers.scrape_me, urls)
             return set(p.map(AbstractScraper._scraper_to_recipe, scrapers))
 

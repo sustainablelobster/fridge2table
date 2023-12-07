@@ -7,27 +7,10 @@ from flask import Flask, current_app, jsonify, request
 from .db import DatabaseHandler
 
 
-def _get_database_handler() -> DatabaseHandler:
-    """Get handle to database"""
-    return DatabaseHandler("fridge2table.db")
-
-
-def create_app(test_config=None):
+def create_app():
     """Create and configure the app"""
-    app = Flask(__name__, instance_relative_config=True)
-
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile("config.py", silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
-
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+    DatabaseHandler()  # ensure database is initialized before app starts
+    app = Flask(__name__)
 
     @app.route("/")
     def home():
@@ -43,7 +26,7 @@ def create_app(test_config=None):
     def add_ingredients():
         """Add ingredients to database"""
         ingredients = request.json
-        db_handler = _get_database_handler()
+        db_handler = DatabaseHandler()
 
         for ingredient in ingredients:
             db_handler.add_user_ingredient(ingredient)
@@ -55,7 +38,7 @@ def create_app(test_config=None):
     def remove_ingredients():
         """Remove ingredients from database"""
         ingredients = request.json
-        db_handler = _get_database_handler()
+        db_handler = DatabaseHandler()
 
         for ingredient in ingredients:
             db_handler.remove_user_ingredient(ingredient)
@@ -66,15 +49,22 @@ def create_app(test_config=None):
     @app.route("/get_ingredients")
     def get_ingredients():
         """Get ingredients from database"""
-        db_handler = _get_database_handler()
+        db_handler = DatabaseHandler()
         ingredients = db_handler.get_user_ingredients()
         return jsonify(ingredients)
 
     @app.route("/get_recipes")
     def get_recipes():
         """Get recipes from database"""
-        db_handler = _get_database_handler()
-        recipes = db_handler.get_matching_recipes()
+        db_handler = DatabaseHandler()
+        do_search = request.args.get("search", type=bool, default=False)
+        recipes = db_handler.get_matching_recipes(do_search)
         return jsonify([x.to_dict() for x in recipes])
+
+    @app.route("/searched_before")
+    def searched_before():
+        """Determine if current inventory of ingredients has been searched before"""
+        db_handler = DatabaseHandler()
+        return jsonify(db_handler.searched_before())
 
     return app

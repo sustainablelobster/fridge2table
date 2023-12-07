@@ -25,7 +25,8 @@ function updateIngredientsDisplay(ingredients) {
 function updateRecipesDisplay(recipes) {
     let html = "<table>";
     for (let i = 0; i < recipes.length; i += 1) {
-        let imageUrl = (recipes[i].image_url) ? recipes[i].image_url : "static/placeholder.png";
+        let imageUrl = (recipes[i].image_url) ?
+                recipes[i].image_url : "static/placeholder.png";
         html += `<tr>
                     <td><img src="${imageUrl}" width="100" height="100"></td>
                     <td>
@@ -71,12 +72,23 @@ async function removeIngredients() {
 
 async function getRecipes() {
     toggleControls(true);
-    const searchButton = document.getElementById("search-button");
-    const originalInnerHTML = searchButton.innerHTML;
-    searchButton.innerHTML = "<em>Searching...</em>";
-    const response = await fetch("/get_recipes");
-    const recipes = await response.json();
+    let response = await fetch("/get_recipes");
+    let recipes = await response.json();
     updateRecipesDisplay(recipes);
+
+    response = await fetch("/searched_before");
+    const searchedBefore = await response.json();
+    if (!searchedBefore) {
+        const recipesDisplay = document.getElementById("recipes-display");
+        recipesDisplay.innerHTML =
+                "<em>Cached results below. Searching for new recipes...</em><hr>"
+                + recipesDisplay.innerHTML;
+        response = await fetch("/get_recipes?" + new URLSearchParams({
+            search: true
+        }));
+        recipes = await response.json();
+        updateRecipesDisplay(recipes);
+    }
+
     toggleControls(false);
-    searchButton.innerHTML = originalInnerHTML;
 }
