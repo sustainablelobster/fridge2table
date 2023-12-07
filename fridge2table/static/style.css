@@ -1,0 +1,63 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: #5F9EA0;
+}
+
+header {
+    background-color: #FAFDF7;
+    text-align: center;
+    height: 20vh;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+textarea {
+    width: 300px;
+    height: 64px;
+}
+
+main {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    font-family: "Courier New";
+}
+
+.section {
+    flex: 50%;
+    text-align: center;
+}
+
+#ingredients-display {
+    background-color: #FAFDF7;
+    width: 90%;
+    height: 55vh;
+    overflow-x: hidden;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+}
+
+#recipes-display {
+    background-color: #FAFDF7;
+    width: 90%;
+    height: 69.5vh;
+    overflow-x: hidden;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+
+    table {
+        border-collapse: collapse;
+    }
+
+    tr {
+        border-bottom: 1pt solid lightgray;
+    }
+}

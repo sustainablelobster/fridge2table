@@ -1,7 +1,5 @@
 beautifulsoup4
 build
 flask
-pluralizer
-pying @ git+https://github.com/sustainablelobster/PyIng.git@minor-fixes
 recipe_scrapers
 requests

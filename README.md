@@ -2,7 +2,7 @@
 
 ## Developer System Requirements
 
-- Some flavor of Linux (not a hard requirement, but easier to support)
+- Some flavor of Linux
 - Git
 - Build tools
     - Debian-based distros (Ubuntu, Mint, etc.):

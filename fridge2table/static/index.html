@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fridge2Table</title>
+    <link rel="stylesheet" href="static/style.css">
+    <script src="static/index.js"></script>
+</head>
+<body onload="initialize()">
+    <header>
+        <a href="/"><img src="static/logo.png" alt="logo"/></a>
+    </header>
+    <main>
+        <div class="section">
+            <h2>Your Ingredients:</h2>
+            <textarea id="input-box" placeholder="enter ingredients here (comma-separated)"></textarea><br>
+            <button id="add-button" type="button" onclick="addIngredients()">Add</button>
+            <button id="remove-button" type="button" onclick="removeIngredients()">Remove</button>
+            <button id="search-button" type="button" onclick="getRecipes()">Search</button>
+            <div id="ingredients-display" class="ingredients-display"></div>
+        </div>
+        <div class="section">
+            <h2>Recommended Recipes:</h2>
+            <div id="recipes-display" class="recipes-display"></div>
+        </div>
+    </main>
+</body>
+</html>

@@ -6,6 +6,10 @@ repos:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
+-   repo: https://github.com/pre-commit/mirrors-fixmyjs
+    rev: v2.0.0
+    hooks:
+    -   id: fixmyjs
 -   repo: https://github.com/psf/black
     rev: 23.10.0
     hooks:
@@ -19,8 +23,6 @@ repos:
         - .
         - beautifulsoup4
         - flask
-        - pluralizer
-        - pying @ git+https://github.com/sustainablelobster/PyIng.git@minor-fixes
         - recipe_scrapers
         - requests
-        exclude: prototypes/
+        exclude: prototypes/|scripts/
