@@ -28,7 +28,7 @@ function updateRecipesDisplay(recipes) {
         let imageUrl = (recipes[i].image_url) ?
                 recipes[i].image_url : "static/placeholder.png";
         html += `<tr>
-                    <td><img src="${imageUrl}" width="100" height="100"></td>
+                    <td><img src="${imageUrl}" width="100" height="100" alt="recipe image"/></td>
                     <td>
                         <a href="${recipes[i].url}"><b>${recipes[i].name}</b></a><br>
                         ${recipes[i].ingredients.join("; ")}
