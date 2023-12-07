@@ -29,7 +29,8 @@ def create_app():
         db_handler = DatabaseHandler()
 
         for ingredient in ingredients:
-            db_handler.add_user_ingredient(ingredient)
+            if ingredient != "":
+                db_handler.add_user_ingredient(ingredient)
 
         ingredients = db_handler.get_user_ingredients()
         return jsonify(ingredients)
