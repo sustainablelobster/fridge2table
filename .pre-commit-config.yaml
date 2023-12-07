@@ -23,8 +23,6 @@ repos:
         - .
         - beautifulsoup4
         - flask
-        - pluralizer
-        - pying @ git+https://github.com/sustainablelobster/PyIng.git@minor-fixes
         - recipe_scrapers
         - requests
         exclude: prototypes/|scripts/

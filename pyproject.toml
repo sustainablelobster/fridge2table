@@ -10,8 +10,6 @@ description = "A web app that recommends recipes from the web based on what's in
 dependencies = [
 	"beautifulsoup4",
 	"flask",
-	"pluralizer",
-	"pying@git+https://github.com/sustainablelobster/PyIng#egg=minor-fixes",
 	"recipe_scrapers",
 	"requests",
 ]
