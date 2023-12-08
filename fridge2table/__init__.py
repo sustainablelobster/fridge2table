@@ -5,10 +5,12 @@ import os
 from flask import Flask, current_app, jsonify, request
 
 from .db import DatabaseHandler
+from .scraping import EpicuriousScraper
 
 
 def create_app():
     """Create and configure the app"""
+    print("Initializing database...")
     DatabaseHandler()  # ensure database is initialized before app starts
     app = Flask(__name__)
 
@@ -58,8 +60,16 @@ def create_app():
     def get_recipes():
         """Get recipes from database"""
         db_handler = DatabaseHandler()
-        do_search = request.args.get("search", type=bool, default=False)
-        recipes = db_handler.get_matching_recipes(do_search)
+
+        if request.args.get("search", type=bool, default=False):
+            new_recipes = EpicuriousScraper.scrape(
+                db_handler.get_user_ingredients(),
+                db_handler.get_recipe_urls(),
+            )
+            for new_recipe in new_recipes:
+                db_handler.add_recipe(new_recipe)
+
+        recipes = db_handler.get_matching_recipes()
         return jsonify([x.to_dict() for x in recipes])
 
     @app.route("/searched_before")

@@ -5,7 +5,6 @@ import os
 import sqlite3
 
 from .utils import dedup_list
-from .scraping import EpicuriousScraper
 from .types import Recipe
 
 
@@ -81,17 +80,11 @@ class DatabaseHandler:
         )
         self._connection.commit()
 
-    def get_matching_recipes(self, new_search: bool = False) -> list[Recipe]:
+    def get_matching_recipes(self) -> list[Recipe]:
         """Get recipes matching user's ingredients, sorted from most to least relevant"""
         user_ingredients = self.get_user_ingredients()
-        if new_search:
-            for recipe in EpicuriousScraper.scrape(
-                user_ingredients, self._get_recipe_urls()
-            ):
-                self.add_recipe(recipe)
-            self._save_search(user_ingredients)
-
         matching_recipes = []
+
         for user_ingredient in user_ingredients:
             matching_recipes += self.get_recipes_containing_ingredient(user_ingredient)
 
@@ -130,6 +123,11 @@ class DatabaseHandler:
         )
         return selection.fetchone() is not None
 
+    def get_recipe_urls(self) -> list[str]:
+        """Return list of all recipe urls in database"""
+        selection = self._cursor.execute("SELECT url FROM recipes")
+        return [x[0] for x in selection.fetchall()]
+
     def _has_recipes(self) -> bool:
         """Determine if database has no recipes"""
         selection = self._cursor.execute("SELECT * FROM recipes;")
@@ -151,11 +149,6 @@ class DatabaseHandler:
             (self._stringify_list(user_ingredients),),
         )
         self._connection.commit()
-
-    def _get_recipe_urls(self) -> list[str]:
-        """Return list of all recipe urls in database"""
-        selection = self._cursor.execute("SELECT url FROM recipes")
-        return [x[0] for x in selection.fetchall()]
 
     @classmethod
     def _stringify_list(cls, l: list[str]) -> str:
