@@ -23,11 +23,11 @@ function updateIngredientsDisplay(ingredients) {
 }
 
 function updateRecipesDisplay(recipes) {
-    let html = "<table>";
+    let html = "<table class=\"recipes-display-table\">";
     for (let i = 0; i < recipes.length; i += 1) {
         let imageUrl = (recipes[i].image_url) ?
                 recipes[i].image_url : "static/placeholder.png";
-        html += `<tr>
+        html += `<tr class="recipes-display-tr">
                     <td><img src="${imageUrl}" width="100" height="100" alt="recipe image"/></td>
                     <td>
                         <a href="${recipes[i].url}"><b>${recipes[i].name}</b></a><br>
