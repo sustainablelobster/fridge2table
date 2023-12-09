@@ -68,6 +68,7 @@ def create_app():
             )
             for new_recipe in new_recipes:
                 db_handler.add_recipe(new_recipe)
+            db_handler.save_search()
 
         recipes = db_handler.get_matching_recipes()
         return jsonify([x.to_dict() for x in recipes])

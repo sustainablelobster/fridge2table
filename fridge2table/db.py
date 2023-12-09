@@ -128,6 +128,14 @@ class DatabaseHandler:
         selection = self._cursor.execute("SELECT url FROM recipes")
         return [x[0] for x in selection.fetchall()]
 
+    def save_search(self) -> None:
+        """Save the current inventory of ingredients to the search table"""
+        self._cursor.execute(
+            "INSERT OR IGNORE INTO searches (ingredients) values (?);",
+            (self._stringify_list(self.get_user_ingredients()),),
+        )
+        self._connection.commit()
+
     def _has_recipes(self) -> bool:
         """Determine if database has no recipes"""
         selection = self._cursor.execute("SELECT * FROM recipes;")
@@ -140,14 +148,6 @@ class DatabaseHandler:
             for recipe_dict in json.load(f):
                 recipe = Recipe(**recipe_dict)
                 self.add_recipe(recipe)
-        self._connection.commit()
-
-    def _save_search(self, user_ingredients) -> None:
-        """Save the current inventory of ingredients to the search table"""
-        self._cursor.execute(
-            "INSERT OR IGNORE INTO searches (ingredients) values (?);",
-            (self._stringify_list(user_ingredients),),
-        )
         self._connection.commit()
 
     @classmethod
