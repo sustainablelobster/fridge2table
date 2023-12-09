@@ -13,6 +13,7 @@ dependencies = [
 	"recipe_scrapers",
 	"requests",
 ]
+requires-python = ">=3.10"
 
 [build-system]
 requires = ["hatchling"]
