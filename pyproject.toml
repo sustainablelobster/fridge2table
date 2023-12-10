@@ -1,6 +1,6 @@
 [project]
 name = "fridge2table"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
 	{ name="Nwamaka Black", email="blacknnwa@gmail.com" },
 	{ name="Paul Fitch", email="plftch9@gmail.com" },
@@ -13,7 +13,7 @@ dependencies = [
 	"recipe_scrapers",
 	"requests",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.12"
 
 [build-system]
 requires = ["hatchling"]
