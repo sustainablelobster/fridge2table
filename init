@@ -1,5 +1,5 @@
 setup_python_venv() {
-    VENV=.cmsc495_venv
+    VENV=.f2t_venv
     REQUIREMENTS_STAMP=$VENV/.requirements.stamp
 
     if [ ! -d $VENV ]

@@ -1,4 +1,4 @@
-# CMSC 495 Project
+# fridge2table
 
 ## Developer System Requirements
 
@@ -33,7 +33,7 @@ pulling changes:** `source ./init`
 The first time you source `init` may take several minutes, as it will do
 the following:
 
-1. Create a Python virtual environment named `.cmsc495_venv`
+1. Create a Python virtual environment named `.f2t_venv`
 2. Activate the virtual environment
 3. Install the `pre-commit` Python package in the virtual environment
 4. Install any Python dependencies listed in
@@ -44,7 +44,7 @@ the following:
 Subsequent runs will simply activate the virtual environment and install any
 new dependencies or hooks.
 
-If you see the string `(.cmsc495_venv)` in your shell's prompt, this means that
+If you see the string `(.f2t_venv)` in your shell's prompt, this means that
 the virtual environment is active (see the example screenshot below).
 
 ![screenshot of active venv](docs/venv_active.jpg)
